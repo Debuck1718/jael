@@ -1,13 +1,98 @@
-﻿    :root {
-      --gold: #d4b779;
-      --gold-light: #ead7a7;
-      --black: #080808;
-      --dark: #111111;
-      --dark-card: #151515;
-      --cream: #f5f0e6;
-      --white: #ffffff;
-      --muted: #aaa49a;
-    }
+﻿/* ==========================================================================
+   JAEL'S EMPIRE — Stylesheet
+   Luxury lifestyle empire: beauty, thrift fashion, desserts & dinners.
+   Accra, Ghana.
+   ========================================================================== */
+
+/* =========================
+   DESIGN TOKENS
+========================= */
+
+:root {
+  --gold: #d4b779;
+  --gold-light: #ead7a7;
+  --gold-deep: #a8863f;
+  --black: #080808;
+  --dark: #111111;
+  --dark-card: #151515;
+  --cream: #f5f0e6;
+  --white: #ffffff;
+  --muted: #aaa49a;
+
+  --line: rgba(212, 183, 121, 0.22);
+  --line-soft: rgba(212, 183, 121, 0.1);
+
+  --font-display: "Cormorant Garamond", serif;
+  --font-body: "Inter", sans-serif;
+
+  --edge: clamp(20px, 6%, 90px);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* =========================
+   GLOBAL TEXTURE + AMBIENT GLOW
+========================= */
+
+/* Fine film grain keeps the large flat black areas from looking dead. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Slow-drifting gold aurora behind the hero. */
+body::after {
+  content: "";
+  position: fixed;
+  top: -35vh;
+  left: 50%;
+  width: 120vw;
+  height: 90vh;
+  transform: translateX(-50%);
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(212, 183, 121, 0.11),
+    transparent 62%
+  );
+  animation: aurora 18s var(--ease) infinite alternate;
+}
+
+@keyframes aurora {
+  from {
+    opacity: 0.55;
+    transform: translateX(-50%) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+/* =========================
+   SCROLL REVEAL
+   Elements are visible by default. The .js flag (set by an inline script
+   before paint) opts into the animated state, so if scripts fail or the
+   observer never runs, the content still shows instead of a blank page.
+========================= */
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
 
     /* =========================
        RESET
@@ -26,12 +111,24 @@
     body {
       background: var(--black);
       color: var(--cream);
-      font-family: "Inter", sans-serif;
+      font-family: var(--font-body);
       line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     a {
       color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    ::selection {
+      background: var(--gold);
+      color: var(--black);
     }
 
     /* =========================
@@ -39,8 +136,7 @@
     ========================= */
 
     header {
-      padding: 28px 6%;
-      border-bottom: 1px solid rgba(212, 183, 121, 0.2);
+      padding: 22px var(--edge);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -48,46 +144,97 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(8, 8, 8, 0.95);
-      backdrop-filter: blur(10px);
+      background: rgba(8, 8, 8, 0.72);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      border-bottom: 1px solid transparent;
+      transition:
+        padding 0.4s var(--ease),
+        background 0.4s var(--ease),
+        border-color 0.4s var(--ease);
+    }
+
+    /* Applied by JS once the user scrolls past the top. */
+    header.is-stuck {
+      padding: 13px var(--edge);
+      background: rgba(8, 8, 8, 0.94);
+      border-bottom-color: var(--line);
+    }
+
+    /* Thin gold progress bar tracking scroll position. */
+    .scroll-progress {
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      height: 2px;
+      width: 0;
+      background: linear-gradient(90deg, var(--gold-deep), var(--gold), var(--gold-light));
+      box-shadow: 0 0 12px rgba(212, 183, 121, 0.65);
+      transition: width 0.1s linear;
     }
 
     .logo {
-      font-family: "Cormorant Garamond", serif;
-      font-size: 32px;
+      font-family: var(--font-display);
+      font-size: 30px;
       letter-spacing: 2px;
       font-weight: 700;
       color: var(--gold);
+      line-height: 1;
+      text-shadow: 0 0 26px rgba(212, 183, 121, 0.25);
     }
 
     .logo span {
-      font-family: "Inter", sans-serif;
-      font-size: 10px;
+      font-family: var(--font-body);
+      font-size: 9px;
       display: block;
       letter-spacing: 5px;
       font-weight: 300;
-      color: var(--cream);
+      color: var(--muted);
+      margin-top: 7px;
+      text-transform: uppercase;
     }
 
     nav {
       display: flex;
       align-items: center;
-      gap: 25px;
+      gap: 28px;
     }
 
     nav a {
       color: var(--cream);
       text-decoration: none;
-      font-size: 12px;
+      font-size: 11px;
       letter-spacing: 2px;
       text-transform: uppercase;
-      opacity: 0.75;
-      transition: 0.3s;
+      opacity: 0.72;
+      position: relative;
+      padding-bottom: 5px;
+      transition: color 0.3s var(--ease), opacity 0.3s var(--ease);
     }
 
-    nav a:hover {
+    /* Gold underline that wipes in from the left. */
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 1px;
+      width: 100%;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease);
+    }
+
+    nav a:hover,
+    nav a.is-active {
       color: var(--gold);
       opacity: 1;
+    }
+
+    nav a:hover::after,
+    nav a.is-active::after {
+      transform: scaleX(1);
     }
 
     /* =========================
@@ -95,53 +242,187 @@
     ========================= */
 
     .hero {
+      position: relative;
       text-align: center;
-      padding: 110px 6% 90px;
-      min-height: 650px;
+      padding: 130px var(--edge) 100px;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-
-      background: radial-gradient(
-        circle at center,
-        rgba(212, 183, 121, 0.08),
-        transparent 55%
-      );
+      overflow: hidden;
     }
 
+    /* Decorative concentric rings behind the headline. */
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      border: 1px solid var(--line-soft);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+    }
+
+    .hero::before {
+      width: 620px;
+      height: 620px;
+      animation: pulse-ring 7s var(--ease) infinite;
+    }
+
+    .hero::after {
+      width: 900px;
+      height: 900px;
+      animation: pulse-ring 7s var(--ease) 1.4s infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%,
+      100% {
+        opacity: 0.28;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        opacity: 0.75;
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+    }
+
+    /* Hairline gold rules flanking the eyebrow text. */
     .hero .lead {
+      display: flex;
+      align-items: center;
+      gap: 18px;
       letter-spacing: 7px;
-      font-size: 12px;
-      opacity: 0.65;
+      font-size: 11px;
+      opacity: 0.7;
       text-transform: uppercase;
-      margin-bottom: 25px;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero .lead::before,
+    .hero .lead::after {
+      content: "";
+      width: 46px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold));
+    }
+
+    .hero .lead::after {
+      background: linear-gradient(90deg, var(--gold), transparent);
     }
 
     .hero h1 {
-      font-family: "Cormorant Garamond", serif;
-      color: var(--gold);
-      font-size: clamp(55px, 9vw, 95px);
-      line-height: 0.95;
+      font-family: var(--font-display);
+      font-size: clamp(56px, 11vw, 132px);
+      line-height: 0.9;
       font-weight: 600;
-      margin-bottom: 30px;
+      margin-bottom: 34px;
+      position: relative;
+      z-index: 1;
+      letter-spacing: -1px;
+
+      /* Metallic gold gradient fill instead of flat colour. */
+      background: linear-gradient(
+        100deg,
+        var(--gold-deep) 0%,
+        var(--gold-light) 38%,
+        var(--gold) 55%,
+        var(--gold-deep) 100%
+      );
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 6px 30px rgba(212, 183, 121, 0.22));
+      animation: sheen 9s linear infinite;
+    }
+
+    @keyframes sheen {
+      to {
+        background-position: 220% center;
+      }
     }
 
     .hero .tag {
       border: 1px solid var(--gold);
       display: inline-block;
-      padding: 13px 28px;
-      letter-spacing: 3px;
-      font-size: 11px;
+      padding: 14px 32px;
+      letter-spacing: 4px;
+      font-size: 10px;
       color: var(--gold);
       text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+      background: rgba(212, 183, 121, 0.04);
+      transition: background 0.4s var(--ease), box-shadow 0.4s var(--ease);
+    }
+
+    .hero .tag:hover {
+      background: rgba(212, 183, 121, 0.12);
+      box-shadow: 0 0 34px rgba(212, 183, 121, 0.28);
     }
 
     .hero-description {
-      max-width: 600px;
-      margin-top: 25px;
+      max-width: 580px;
+      margin: 32px auto 0;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 15px;
+      line-height: 1.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* =========================
+       SCROLLING MARQUEE
+    ========================= */
+
+    .marquee {
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+      padding: 20px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      background: var(--dark);
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      animation: slide 34s linear infinite;
+    }
+
+    .marquee:hover .marquee-track {
+      animation-play-state: paused;
+    }
+
+    .marquee-track span {
+      font-family: var(--font-display);
+      font-size: 25px;
+      color: var(--cream);
+      opacity: 0.85;
+      padding: 0 30px;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .marquee-track span::after {
+      content: "◆";
+      font-size: 10px;
+      color: var(--gold);
+      opacity: 0.85;
+    }
+
+    @keyframes slide {
+      to {
+        transform: translateX(-50%);
+      }
     }
 
     /* =========================
@@ -150,20 +431,33 @@
 
     .section-heading {
       text-align: center;
-      padding: 30px 6% 10px;
+      padding: 110px var(--edge) 10px;
     }
 
     .section-heading h2 {
-      font-family: "Cormorant Garamond", serif;
+      font-family: var(--font-display);
       color: var(--gold);
-      font-size: 48px;
+      font-size: clamp(40px, 5vw, 56px);
+      line-height: 1.05;
+      font-weight: 600;
     }
 
     .section-heading p {
       color: var(--muted);
-      font-size: 13px;
-      letter-spacing: 2px;
+      font-size: 11px;
+      letter-spacing: 4px;
       text-transform: uppercase;
+      margin-top: 12px;
+    }
+
+    /* Gold accent divider under section headings. */
+    .section-heading::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 1px;
+      margin: 28px auto 0;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
     }
 
     /* =========================
@@ -173,59 +467,120 @@
     .brands {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-      padding: 40px 6% 100px;
+      gap: 26px;
+      padding: 55px var(--edge) 120px;
       max-width: 1400px;
       margin: auto;
     }
 
     .card {
-      border: 1px solid rgba(212, 183, 121, 0.25);
-      padding: 45px 30px;
-      text-align: center;
-
-      background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.035),
-        rgba(0, 0, 0, 0)
-      );
-
-      transition: 0.35s;
-      min-height: 380px;
-
+      position: relative;
+      border: 1px solid var(--line);
+      padding: 60px 34px 50px;
+      text-align: left;
+      overflow: hidden;
+      min-height: 440px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+
+      background: linear-gradient(
+        170deg,
+        rgba(255, 255, 255, 0.045) 0%,
+        rgba(255, 255, 255, 0.008) 45%,
+        rgba(0, 0, 0, 0) 100%
+      );
+
+      transition:
+        transform 0.55s var(--ease),
+        border-color 0.55s var(--ease),
+        box-shadow 0.55s var(--ease);
+    }
+
+    /* Soft gold wash that fades in on hover. */
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle at 50% 0%,
+        rgba(212, 183, 121, 0.14),
+        transparent 68%
+      );
+      opacity: 0;
+      transition: opacity 0.55s var(--ease);
+      pointer-events: none;
+    }
+
+    /* Oversized ghost numeral behind each card. */
+    .card::after {
+      content: attr(data-index);
+      position: absolute;
+      right: 18px;
+      bottom: -22px;
+      font-family: var(--font-display);
+      font-size: 120px;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--gold);
+      opacity: 0.07;
+      transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+      pointer-events: none;
     }
 
     .card:hover {
       border-color: var(--gold);
-      transform: translateY(-8px);
+      transform: translateY(-10px);
+      box-shadow:
+        0 30px 60px -25px rgba(0, 0, 0, 0.9),
+        0 0 44px -12px rgba(212, 183, 121, 0.28);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:hover::after {
+      opacity: 0.14;
+      transform: translateY(-10px);
     }
 
     .card h3 {
-      font-family: "Cormorant Garamond", serif;
+      font-family: var(--font-display);
       color: var(--gold);
-      font-size: 32px;
+      font-size: 33px;
       line-height: 1.1;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
     }
 
     .card .cat {
-      font-size: 10px;
+      font-size: 9px;
       letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 20px;
+      margin-bottom: 22px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line-soft);
+      position: relative;
+      z-index: 1;
     }
 
     .card p {
       font-size: 14px;
-      line-height: 1.8;
+      line-height: 1.85;
       color: #c4c0b8;
-      max-width: 330px;
-      margin-bottom: 28px;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card .btn {
+      align-self: flex-start;
+      margin-top: auto;
+      position: relative;
+      z-index: 1;
     }
 
     /* =========================
@@ -233,22 +588,55 @@
     ========================= */
 
     .btn {
+      position: relative;
       display: inline-block;
+      padding: 14px 30px;
       border: 1px solid var(--gold);
       color: var(--gold);
-      padding: 12px 25px;
-      text-decoration: none;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      transition: 0.3s;
       background: transparent;
+      text-decoration: none;
+      font-family: var(--font-body);
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
       cursor: pointer;
+      overflow: hidden;
+      z-index: 1;
+      transition: color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+    }
+
+    /* Gold panel that slides up to fill the button. */
+    .btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(100deg, var(--gold-deep), var(--gold-light));
+      transform: translateY(101%);
+      transition: transform 0.45s var(--ease);
     }
 
     .btn:hover {
-      background: var(--gold);
       color: var(--black);
+      box-shadow: 0 10px 30px -10px rgba(212, 183, 121, 0.6);
+    }
+
+    .btn:hover::before {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn:disabled::before {
+      transform: translateY(101%);
+    }
+
+    .btn:disabled:hover {
+      color: var(--gold);
+      box-shadow: none;
     }
 
     /* =========================
@@ -256,26 +644,81 @@
     ========================= */
 
     .about {
-      padding: 90px 6%;
+      position: relative;
+      padding: 120px var(--edge);
       text-align: center;
       background: var(--dark);
-      border-top: 1px solid rgba(212, 183, 121, 0.1);
-      border-bottom: 1px solid rgba(212, 183, 121, 0.1);
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+      overflow: hidden;
+    }
+
+    /* Faint diagonal light sweep. */
+    .about::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        118deg,
+        transparent 30%,
+        rgba(212, 183, 121, 0.07) 50%,
+        transparent 70%
+      );
+      pointer-events: none;
     }
 
     .about h2 {
-      font-family: "Cormorant Garamond", serif;
+      font-family: var(--font-display);
       color: var(--gold);
-      font-size: 52px;
-      margin-bottom: 20px;
+      font-size: clamp(40px, 5vw, 58px);
+      margin-bottom: 22px;
+      line-height: 1.05;
+      font-weight: 600;
+      position: relative;
     }
 
     .about p {
-      max-width: 700px;
+      max-width: 720px;
       margin: auto;
       color: #bbb7af;
-      font-size: 15px;
-      line-height: 1.9;
+      font-size: 16px;
+      line-height: 2;
+      position: relative;
+    }
+
+    /* =========================
+       STATS
+    ========================= */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 65px auto 0;
+      position: relative;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 26px 12px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .stat .num {
+      font-family: var(--font-display);
+      font-size: 46px;
+      color: var(--gold);
+      line-height: 1;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .stat .label {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
     /* =========================
@@ -283,29 +726,55 @@
     ========================= */
 
     .contact {
-      padding: 90px 6%;
+      padding: 120px var(--edge);
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: 1.15fr 0.85fr;
       gap: 70px;
       max-width: 1400px;
       margin: auto;
+      align-items: start;
     }
 
     .contact h2 {
-      font-family: "Cormorant Garamond", serif;
+      font-family: var(--font-display);
       color: var(--gold);
-      font-size: 52px;
-      margin-bottom: 25px;
+      font-size: clamp(40px, 5vw, 58px);
+      margin-bottom: 24px;
+      line-height: 1.05;
+      font-weight: 600;
+    }
+
+    .info > p:first-of-type {
+      color: #bbb7af;
+      font-size: 15px;
+      line-height: 1.9;
+      margin-bottom: 34px;
+      max-width: 520px;
     }
 
     .info p {
-      margin: 13px 0;
+      margin: 15px 0;
       font-size: 14px;
       color: #bbb7af;
     }
 
     .info b {
       color: var(--gold);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* Pill note above the social links. */
+    .info .note {
+      display: inline-block;
+      margin-top: 26px;
+      padding: 9px 18px;
+      border-left: 2px solid var(--gold);
+      background: rgba(212, 183, 121, 0.06);
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
     }
 
     /* =========================
@@ -321,16 +790,23 @@
 
     .social-links a {
       border: 1px solid rgba(212, 183, 121, 0.35);
-      padding: 10px 16px;
+      padding: 11px 18px;
       text-decoration: none;
-      font-size: 11px;
-      letter-spacing: 1px;
-      transition: 0.3s;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition:
+        background 0.35s var(--ease),
+        border-color 0.35s var(--ease),
+        color 0.35s var(--ease),
+        transform 0.35s var(--ease);
     }
 
     .social-links a:hover {
       border-color: var(--gold);
-      color: var(--gold);
+      background: var(--gold);
+      color: var(--black);
+      transform: translateY(-3px);
     }
 
     /* =========================
@@ -338,23 +814,37 @@
     ========================= */
 
     .message-box {
+      position: relative;
       background: var(--dark-card);
-      border: 1px solid rgba(212, 183, 121, 0.2);
-      padding: 30px;
+      border: 1px solid var(--line);
+      padding: 40px 34px;
+      overflow: hidden;
+    }
+
+    /* Gold hairline along the top edge. */
+    .message-box::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
     }
 
     .message-box h3 {
-      font-family: "Cormorant Garamond", serif;
+      font-family: var(--font-display);
       color: var(--gold);
-      font-size: 32px;
-      margin-bottom: 20px;
+      font-size: 34px;
+      margin-bottom: 14px;
+      line-height: 1.1;
     }
 
-    .message-box p {
+    .message-box > p {
       color: var(--muted);
       font-size: 14px;
       line-height: 1.8;
-      margin-bottom: 25px;
+      margin-bottom: 26px;
     }
 
     /* =========================
@@ -370,29 +860,39 @@
     .contact-form input,
     .contact-form textarea {
       width: 100%;
-      padding: 14px 15px;
-      background: transparent;
+      padding: 15px 16px;
+      background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(212, 183, 121, 0.25);
       color: var(--cream);
-      font-family: "Inter", sans-serif;
+      font-family: var(--font-body);
       font-size: 13px;
       outline: none;
-      transition: 0.3s;
+      transition:
+        border-color 0.35s var(--ease),
+        background 0.35s var(--ease),
+        box-shadow 0.35s var(--ease);
     }
 
     .contact-form input:focus,
     .contact-form textarea:focus {
       border-color: var(--gold);
+      background: rgba(212, 183, 121, 0.05);
+      box-shadow: 0 0 0 3px rgba(212, 183, 121, 0.1);
     }
 
     .contact-form textarea {
-      min-height: 130px;
+      min-height: 135px;
       resize: vertical;
     }
 
     .contact-form input::placeholder,
     .contact-form textarea::placeholder {
       color: #77736c;
+      letter-spacing: 0.5px;
+    }
+
+    .contact-form .btn {
+      margin-top: 6px;
     }
 
     /* =========================
@@ -400,28 +900,105 @@
     ========================= */
 
     footer {
-      border-top: 1px solid rgba(212, 183, 121, 0.2);
-      padding: 35px 6%;
+      border-top: 1px solid var(--line);
+      padding: 55px var(--edge) 40px;
       text-align: center;
       background: var(--black);
     }
 
     footer .footer-logo {
-      font-family: "Cormorant Garamond", serif;
-      font-size: 28px;
+      font-family: var(--font-display);
+      font-size: 34px;
       color: var(--gold);
-      margin-bottom: 8px;
+      margin-bottom: 18px;
+      line-height: 1;
+      text-shadow: 0 0 30px rgba(212, 183, 121, 0.2);
     }
 
     footer p {
       font-size: 11px;
       color: var(--muted);
       letter-spacing: 1px;
+      margin: 8px 0;
+    }
+
+    /* Promotional banner line. */
+    footer .promo {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line-soft);
+      display: inline-block;
+    }
+
+    footer .footer-tag {
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+
+    footer .copyright {
+      margin-top: 22px;
+      opacity: 0.65;
+    }
+
+    /* =========================
+       BACK TO TOP
+    ========================= */
+
+    .to-top {
+      position: fixed;
+      right: 26px;
+      bottom: 26px;
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--gold);
+      background: rgba(8, 8, 8, 0.85);
+      backdrop-filter: blur(8px);
+      color: var(--gold);
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 1100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(16px);
+      transition:
+        opacity 0.4s var(--ease),
+        visibility 0.4s var(--ease),
+        transform 0.4s var(--ease),
+        background 0.4s var(--ease),
+        color 0.4s var(--ease);
+    }
+
+    .to-top.is-visible {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+
+    .to-top:hover {
+      background: var(--gold);
+      color: var(--black);
     }
 
     /* =========================
        RESPONSIVE DESIGN
     ========================= */
+
+    @media (max-width: 1024px) {
+      .brands {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .brands .card:last-child {
+        grid-column: 1 / -1;
+      }
+    }
 
     @media (max-width: 900px) {
       .brands {
@@ -429,77 +1006,237 @@
         max-width: 650px;
       }
 
+      .brands .card:last-child {
+        grid-column: auto;
+      }
+
       .contact {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 50px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero::before,
+      .hero::after {
+        display: none;
       }
     }
 
     @media (max-width: 700px) {
       header {
-        padding: 20px 5%;
         flex-direction: column;
+        padding: 16px 4% 0;
+        gap: 10px;
       }
 
+      header.is-stuck {
+        padding: 10px 4% 0;
+      }
+
+      .logo {
+        text-align: center;
+      }
+
+      /*
+        Phones: give each link a real touch target (44px is the accepted
+        minimum) and let the row span the full width evenly. No wrapping
+        is needed now that the targets are sized to fit.
+      */
       nav {
-        gap: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
+        width: 100%;
+        gap: 0;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        border-top: 1px solid var(--line-soft);
+        padding-top: 4px;
       }
 
       nav a {
+        flex: 1 1 0;
+        text-align: center;
         font-size: 10px;
         letter-spacing: 1.5px;
+        padding: 15px 4px 13px;
+        opacity: 0.8;
+      }
+
+      /* Keep the active underline inside the padded target. */
+      nav a::after {
+        left: 12%;
+        width: 76%;
+        bottom: 7px;
       }
 
       .hero {
-        padding: 80px 5% 70px;
-        min-height: 550px;
+        padding: 70px 5% 70px;
+        min-height: auto;
       }
 
       .hero h1 {
-        font-size: clamp(50px, 16vw, 80px);
+        font-size: clamp(44px, 15vw, 76px);
       }
 
-      .section-heading h2,
-      .about h2,
-      .contact h2 {
-        font-size: 42px;
+      .hero .lead::before,
+      .hero .lead::after {
+        width: 26px;
+      }
+
+      .section-heading {
+        padding: 75px 5% 10px;
       }
 
       .brands {
-        padding: 30px 5% 70px;
+        padding: 40px 5% 85px;
+      }
+
+      .about {
+        padding: 85px 5%;
       }
 
       .contact {
-        padding: 70px 5%;
+        padding: 85px 5%;
+      }
+
+      .marquee-track span {
+        font-size: 19px;
+      }
+
+      /* Footer promo lines read better stacked at a tighter tracking. */
+      footer .promo {
+        font-size: 11px;
+        letter-spacing: 1px;
+        line-height: 1.8;
+        max-width: 30ch;
+      }
+
+      footer .footer-tag {
+        letter-spacing: 1.5px;
+        line-height: 2;
+        max-width: 26ch;
+      }
+
+      /* Lift the button clear of the footer text it was overlapping. */
+      .to-top {
+        right: 14px;
+        bottom: 14px;
+        width: 42px;
+        height: 42px;
+      }
+
+      footer {
+        padding-bottom: 78px;
       }
     }
 
     @media (max-width: 450px) {
       .logo {
-        font-size: 27px;
+        font-size: 25px;
       }
 
-      nav {
-        gap: 10px;
+      .logo span {
+        letter-spacing: 3.5px;
       }
 
       nav a {
         font-size: 9px;
+        letter-spacing: 1px;
+        padding: 14px 2px 12px;
+      }
+
+      nav a::after {
+        left: 8%;
+        width: 84%;
+        bottom: 6px;
       }
 
       .hero .lead {
         letter-spacing: 4px;
         font-size: 10px;
+        gap: 12px;
       }
 
       .hero .tag {
-        padding: 11px 18px;
+        padding: 12px 20px;
         font-size: 9px;
+        letter-spacing: 2.5px;
       }
 
       .card {
-        padding: 35px 20px;
+        padding: 42px 22px 38px;
+        min-height: auto;
+      }
+
+      .card h3 {
+        font-size: 29px;
+      }
+
+      .card::after {
+        font-size: 88px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .stat .num {
+        font-size: 34px;
+      }
+
+      .stat .label {
+        letter-spacing: 1.5px;
+      }
+
+      .message-box {
+        padding: 32px 22px;
+      }
+
+      .info .note {
+        font-size: 10px;
+        letter-spacing: 1px;
+        line-height: 1.7;
+      }
+
+      .social-links a {
+        flex: 1 1 44%;
+        text-align: center;
+        padding: 14px 10px;
+      }
+
+      footer .footer-logo {
+        font-size: 29px;
+      }
+    }
+
+    /* =========================
+       ACCESSIBILITY
+    ========================= */
+
+    :focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .js .reveal {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* Static marquee instead of an endless scroll. */
+      .marquee-track {
+        animation: none;
       }
     }

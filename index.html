@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 
   <meta
     name="description"
-    content="Jael's Empire â€” One Empire, Three Brands. Luxury beauty, premium thrift fashion, desserts and dinners in Accra, Ghana."
+    content="Jael's Empire — one empire, three brands. Luxury braids & beauty, affordable premium thrift fashion, and desserts & dinners in Accra, Ghana."
   >
 
   <!-- Google Fonts -->
@@ -21,6 +21,14 @@
   >
 
   <link rel="stylesheet" href="css/style.css">
+
+  <!--
+    Opt in to the animated scroll-reveal state. Set here (before paint and
+    before the deferred script runs) so reveal animations never flash.
+    If JavaScript is unavailable this line never executes and the CSS keeps
+    all content visible by default.
+  -->
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 
 <body>
@@ -30,9 +38,13 @@
   ========================== -->
 
   <header>
+
+    <!-- Scroll progress indicator -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
     <div class="logo">
       Jael's Empire
-      <span>ONE EMPIRE Â· THREE BRANDS</span>
+      <span>Accra · Ghana</span>
     </div>
 
     <nav>
@@ -59,7 +71,7 @@
       <h1>Jael's Empire</h1>
 
       <div class="tag">
-        One Empire Â· Three Brands
+        Luxury · Affordable · Premium
       </div>
 
       <p class="hero-description">
@@ -71,12 +83,34 @@
 
 
     <!-- =========================
+         MARQUEE
+    ========================== -->
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Beauty</span>
+        <span>Thrift Fashion</span>
+        <span>Desserts</span>
+        <span>Dinners</span>
+        <span>Est. 2024</span>
+        <span>Accra, Ghana</span>
+        <span>Beauty</span>
+        <span>Thrift Fashion</span>
+        <span>Desserts</span>
+        <span>Dinners</span>
+        <span>Est. 2024</span>
+        <span>Accra, Ghana</span>
+      </div>
+    </div>
+
+
+    <!-- =========================
          BRANDS
     ========================== -->
 
     <section id="brands">
 
-      <div class="section-heading">
+      <div class="section-heading reveal">
         <h2>Our Brands</h2>
         <p>Discover the Empire</p>
       </div>
@@ -84,12 +118,12 @@
       <div class="brands">
 
         <!-- Brand 1 -->
-        <article class="card">
+        <article class="card reveal" data-index="01">
 
-          <h3>Jael Beauty</h3>
+          <h3>Ibex Haute Opulence</h3>
 
           <div class="cat">
-            Luxury Beauty
+            Luxury Braids & Beauty
           </div>
 
           <p>
@@ -105,12 +139,12 @@
 
 
         <!-- Brand 2 -->
-        <article class="card">
+        <article class="card reveal" data-index="02">
 
-          <h3>Jael Thrift</h3>
+          <h3>Jajashriftshop</h3>
 
           <div class="cat">
-            Premium Thrift Fashion
+            Affordable Thrift & Premium Quality
           </div>
 
           <p>
@@ -126,17 +160,17 @@
 
 
         <!-- Brand 3 -->
-        <article class="card">
+        <article class="card reveal" data-index="03">
 
-          <h3>Jael's Kitchen</h3>
+          <h3>dessertstodeinners</h3>
 
           <div class="cat">
-            Desserts & Dinners
+            Premium Desserts & Dinners
           </div>
 
           <p>
-            Delicious desserts and satisfying dinner experiences
-            prepared with care for every occasion.
+            Premium desserts and dinners prepared with care
+            for every occasion.
           </p>
 
           <a href="#contact" class="btn">
@@ -156,15 +190,39 @@
 
     <section class="about" id="about">
 
-      <h2>About the Empire</h2>
+      <h2 class="reveal">About the Empire</h2>
 
-      <p>
+      <p class="reveal">
         Jael's Empire is a lifestyle brand built around creativity,
         quality and the desire to bring different experiences together
         under one vision. From beauty and fashion to food, each brand
         represents a unique part of the Empire while maintaining the
         same commitment to elegance and customer satisfaction.
       </p>
+
+      <div class="stats reveal">
+
+        <div class="stat">
+          <span class="num">03</span>
+          <span class="label">Brands</span>
+        </div>
+
+        <div class="stat">
+          <span class="num">2024</span>
+          <span class="label">Established</span>
+        </div>
+
+        <div class="stat">
+          <span class="num">Accra</span>
+          <span class="label">Home Base</span>
+        </div>
+
+        <div class="stat">
+          <span class="num">100%</span>
+          <span class="label">Made With Care</span>
+        </div>
+
+      </div>
 
     </section>
 
@@ -177,9 +235,9 @@
 
       <div class="info">
 
-        <h2>Let's Connect</h2>
+        <h2 class="reveal">Let's Connect</h2>
 
-        <p>
+        <p class="reveal">
           Whether you want to shop, collaborate, place an order,
           or simply learn more about Jael's Empire, we'd love to hear
           from you.
@@ -190,11 +248,23 @@
         </p>
 
         <p>
-          <b>Email:</b> hello@jaelsempire.com
+          <b>Contact:</b> 0206724129
         </p>
 
         <p>
-          <b>Phone:</b> +233 XX XXX XXXX
+          <b>Snapchat:</b> jael9898
+        </p>
+
+        <p>
+          <b>TikTok:</b> _augustjael
+        </p>
+
+        <p>
+          <b>Instagram:</b> _augustjael
+        </p>
+
+        <p class="note">
+          Contact these socials for booking &amp; orders
         </p>
 
         <div class="social-links">
@@ -204,7 +274,7 @@
           </a>
 
           <a href="#" target="_blank" rel="noopener">
-            Facebook
+            Snapchat
           </a>
 
           <a href="#" target="_blank" rel="noopener">
@@ -222,7 +292,7 @@
 
       <!-- Message Box -->
 
-      <div class="message-box">
+      <div class="message-box reveal">
 
         <h3>Send a Message</h3>
 
@@ -276,11 +346,25 @@
       Jael's Empire
     </div>
 
-    <p>
-      Â©ï¸ 2026 Jael's Empire. All Rights Reserved.
+    <p class="promo">
+      Back to School &amp; October Deals Available — DM for Catalogue, Menu &amp; Prices
+    </p>
+
+    <p class="footer-tag">
+      Luxury · Affordable · Premium · Est. 2024
+    </p>
+
+    <p class="copyright">
+      © 2026 Jael's Empire. All Rights Reserved.
     </p>
 
   </footer>
+
+
+  <!-- Back to top -->
+  <button class="to-top" id="toTop" type="button" aria-label="Back to top">
+    ↑
+  </button>
 
 
   <!-- =========================
