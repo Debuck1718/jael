@@ -1,15 +1,22 @@
-﻿﻿<!DOCTYPE html>
+﻿﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Jael's Empire | Accra, Ghana</title>
+  <title>Jael's Empire | Beauty, Thrift Fashion &amp; Desserts — Accra, Ghana</title>
 
   <meta
     name="description"
-    content="Jael's Empire — one empire, three brands. Luxury braids & beauty, affordable premium thrift fashion, and desserts & dinners in Accra, Ghana."
+    content="Shop Jael's Empire — luxury braids & beauty by Ibex Haute Opulence, affordable premium thrift from Jajashriftshop, and desserts & dinners by dessertstodeinners. Order on WhatsApp or pay by MoMo. Accra, Ghana."
   >
+
+  <!-- Social sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Jael's Empire | Beauty, Thrift Fashion &amp; Desserts — Accra">
+  <meta property="og:description" content="One empire, three brands. Shop beauty, thrift fashion and desserts. Order on WhatsApp or pay by MoMo.">
+  <meta property="og:locale" content="en_GH">
+  <meta name="theme-color" content="#080808">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,9 +36,40 @@
     all content visible by default.
   -->
   <script>document.documentElement.classList.add("js");</script>
+
+  <!--
+    Search engines: the shop is rendered from js/products.js, so a crawler
+    that does not run JavaScript would see an empty grid. This block gives
+    them the business details in a form they can read.
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Jael's Empire",
+    "description": "Ghanaian lifestyle empire: luxury braids and beauty, affordable premium thrift fashion, and desserts and dinners.",
+    "telephone": "+233206724129",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Accra",
+      "addressCountry": "GH"
+    },
+    "priceRange": "GHS",
+    "currenciesAccepted": "GHS",
+    "paymentAccepted": "Mobile Money, Cash",
+    "sameAs": [
+      "https://www.instagram.com/_augustjael",
+      "https://www.tiktok.com/@_augustjael",
+      "https://www.snapchat.com/add/jael9898"
+    ]
+  }
+  </script>
 </head>
 
 <body>
+
+  <!-- Skip link: keyboard users can jump straight past the header. -->
+  <a class="skip-link" href="#shop">Skip to shop</a>
 
   <!-- =========================
        HEADER
@@ -42,17 +80,36 @@
     <!-- Scroll progress indicator -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
-    <div class="logo">
+    <a class="logo" href="#home">
       Jael's Empire
       <span>Accra · Ghana</span>
-    </div>
+    </a>
 
     <nav>
       <a href="#home">Home</a>
+      <a href="#shop">Shop</a>
       <a href="#brands">Brands</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </nav>
+
+    <!-- Cart button. The badge shows how many items are in the basket. -->
+    <button
+      class="cart-button"
+      id="cartButton"
+      type="button"
+      aria-label="Open cart"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <path d="M3 6h18"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      <span class="cart-label">Cart</span>
+      <span class="cart-count" id="cartCount" hidden>0</span>
+    </button>
   </header>
 
 
@@ -79,6 +136,10 @@
         fashion, food and unforgettable experiences in Accra.
       </p>
 
+      <a href="#shop" class="btn hero-btn">
+        Shop the Empire
+      </a>
+
     </section>
 
 
@@ -102,6 +163,44 @@
         <span>Accra, Ghana</span>
       </div>
     </div>
+
+
+    <!-- =========================
+         SHOP
+         The grid is built from js/products.js into #productGrid. The
+         <noscript> block below is the fallback when JS is unavailable.
+    ========================== -->
+
+    <section class="shop" id="shop">
+
+      <div class="section-heading reveal">
+        <h2>The Shop</h2>
+        <p>Beauty · Fashion · Food</p>
+      </div>
+
+      <!-- Filter buttons. Built by JS from the brand list. -->
+      <div
+        class="filters reveal"
+        id="filters"
+        role="group"
+        aria-label="Filter products by brand"
+      ></div>
+
+      <!-- Live region so screen readers hear the result count change. -->
+      <p class="result-count" id="resultCount" role="status" aria-live="polite"></p>
+
+      <div class="product-grid" id="productGrid"></div>
+
+      <noscript>
+        <p class="noscript-note">
+          The shop needs JavaScript to display products. Please enable it,
+          or message us on WhatsApp at
+          <a href="https://wa.me/233206724129">+233 20 672 4129</a>
+          and we will send you the full catalogue and prices.
+        </p>
+      </noscript>
+
+    </section>
 
 
     <!-- =========================
@@ -131,9 +230,10 @@
             to enhance confidence, elegance and everyday self-care.
           </p>
 
-          <a href="#" class="btn">
-            Explore Brand
-          </a>
+          <!-- data-shop-brand filters the grid above instead of dead-ending. -->
+          <button type="button" class="btn" data-shop-brand="ibex">
+            Shop Beauty
+          </button>
 
         </article>
 
@@ -152,9 +252,9 @@
             individuality, quality and timeless style.
           </p>
 
-          <a href="#" class="btn">
+          <button type="button" class="btn" data-shop-brand="jaja">
             Shop Collection
-          </a>
+          </button>
 
         </article>
 
@@ -173,9 +273,9 @@
             for every occasion.
           </p>
 
-          <a href="#contact" class="btn">
-            Place an Enquiry
-          </a>
+          <button type="button" class="btn" data-shop-brand="d2d">
+            Shop Menu
+          </button>
 
         </article>
 
@@ -248,7 +348,15 @@
         </p>
 
         <p>
-          <b>Contact:</b> 0206724129
+          <b>Contact:</b>
+          <a href="tel:+233206724129">020 672 4129</a>
+        </p>
+
+        <p>
+          <b>WhatsApp:</b>
+          <a href="https://wa.me/233206724129" target="_blank" rel="noopener">
+            020 672 4129
+          </a>
         </p>
 
         <p>
@@ -264,24 +372,40 @@
         </p>
 
         <p class="note">
-          Contact these socials for booking &amp; orders
+          Order on WhatsApp · Pay by MoMo or cash on delivery
         </p>
 
         <div class="social-links">
 
-          <a href="#" target="_blank" rel="noopener">
+          <a
+            href="https://www.instagram.com/_augustjael"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Instagram
           </a>
 
-          <a href="#" target="_blank" rel="noopener">
+          <a
+            href="https://www.snapchat.com/add/jael9898"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Snapchat
           </a>
 
-          <a href="#" target="_blank" rel="noopener">
+          <a
+            href="https://www.tiktok.com/@_augustjael"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             TikTok
           </a>
 
-          <a href="#" target="_blank" rel="noopener">
+          <a
+            href="https://wa.me/233206724129"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             WhatsApp
           </a>
 
@@ -290,7 +414,14 @@
       </div>
 
 
-      <!-- Message Box -->
+      <!--
+        Message box.
+
+        This form previously faked success and threw the message away.
+        It now composes a real WhatsApp message to the shop, because a
+        static site has no server to email from. See initContactForm()
+        in js/script.js.
+      -->
 
       <div class="message-box reveal">
 
@@ -298,33 +429,46 @@
 
         <p>
           Have an enquiry, collaboration idea or order request?
-          Send us a message.
+          Send us a message and it goes straight to our WhatsApp.
         </p>
 
-        <form class="contact-form">
+        <form class="contact-form" id="contactForm" novalidate>
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            required
-          >
+          <label class="field">
+            <span class="field-label">Your Name</span>
+            <input
+              type="text"
+              name="name"
+              placeholder="e.g. Ama Mensah"
+              autocomplete="name"
+              required
+            >
+          </label>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            required
-          >
+          <label class="field">
+            <span class="field-label">Your Phone or Email</span>
+            <input
+              type="text"
+              name="contact"
+              placeholder="So we can reply"
+              autocomplete="tel"
+              required
+            >
+          </label>
 
-          <textarea
-            name="message"
-            placeholder="Your Message"
-            required
-          ></textarea>
+          <label class="field">
+            <span class="field-label">Your Message</span>
+            <textarea
+              name="message"
+              placeholder="Tell us what you need"
+              required
+            ></textarea>
+          </label>
+
+          <p class="form-error" id="contactError" role="alert" hidden></p>
 
           <button type="submit" class="btn">
-            Send Message
+            Send on WhatsApp
           </button>
 
         </form>
@@ -347,7 +491,7 @@
     </div>
 
     <p class="promo">
-      Back to School &amp; October Deals Available — DM for Catalogue, Menu &amp; Prices
+      Back to School &amp; October Deals Available — Order on WhatsApp or Pay by MoMo
     </p>
 
     <p class="footer-tag">
@@ -361,6 +505,251 @@
   </footer>
 
 
+  <!-- =========================
+       CART DRAWER
+       Slides in from the right. Built and updated by js/script.js.
+  ========================== -->
+
+  <div class="cart-overlay" id="cartOverlay" hidden></div>
+
+  <aside
+    class="cart-drawer"
+    id="cartDrawer"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cartTitle"
+    aria-hidden="true"
+    tabindex="-1"
+    hidden
+  >
+
+    <div class="cart-head">
+      <h2 id="cartTitle">Your Order</h2>
+
+      <button
+        class="cart-close"
+        id="cartClose"
+        type="button"
+        aria-label="Close cart"
+      >
+        &times;
+      </button>
+    </div>
+
+    <!-- Cart line items are rendered here. -->
+    <div class="cart-body" id="cartBody"></div>
+
+    <!-- Shown only when the cart is empty. -->
+    <div class="cart-empty" id="cartEmpty">
+      <p class="cart-empty-title">Your basket is empty</p>
+      <p class="cart-empty-text">
+        Browse the shop and add something you love.
+      </p>
+      <button type="button" class="btn" id="cartEmptyBtn">
+        Start Shopping
+      </button>
+    </div>
+
+    <div class="cart-foot" id="cartFoot" hidden>
+
+      <div class="cart-total-row">
+        <span>Subtotal</span>
+        <strong id="cartSubtotal">GHS 0.00</strong>
+      </div>
+
+      <p class="cart-shipping-note">
+        Delivery in Accra is arranged over WhatsApp after you order.
+      </p>
+
+      <button type="button" class="btn btn-wide" id="checkoutBtn">
+        Checkout
+      </button>
+
+      <button type="button" class="cart-clear" id="cartClear">
+        Clear basket
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- =========================
+       OPTION PICKER
+       Asks the customer to choose a size / colour / flavour before adding.
+  ========================== -->
+
+  <div class="modal-overlay" id="optionModal" hidden>
+
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="optionTitle"
+      tabindex="-1"
+    >
+
+      <h3 id="optionTitle">Choose an option</h3>
+
+      <form id="optionForm">
+        <div id="optionFields"></div>
+
+        <p class="form-error" id="optionError" role="alert" hidden></p>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="optionCancel">
+            Cancel
+          </button>
+          <button type="submit" class="btn">Add to Basket</button>
+        </div>
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       CHECKOUT
+       Collects name, phone, delivery area and payment method, then hands
+       the order to WhatsApp.
+  ========================== -->
+
+  <div class="modal-overlay" id="checkoutModal" hidden>
+
+    <div
+      class="modal modal-checkout"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="checkoutTitle"
+      tabindex="-1"
+    >
+
+      <h3 id="checkoutTitle">Checkout</h3>
+
+      <div class="checkout-summary" id="checkoutSummary"></div>
+
+      <form id="checkoutForm" novalidate>
+
+        <label class="field">
+          <span class="field-label">Full Name</span>
+          <input
+            type="text"
+            name="name"
+            placeholder="e.g. Ama Mensah"
+            autocomplete="name"
+            required
+          >
+        </label>
+
+        <label class="field">
+          <span class="field-label">Phone Number</span>
+          <input
+            type="tel"
+            name="phone"
+            placeholder="e.g. 0244 000 000"
+            autocomplete="tel"
+            required
+          >
+        </label>
+
+        <label class="field">
+          <span class="field-label">Delivery Area in Accra</span>
+          <input
+            type="text"
+            name="area"
+            placeholder="e.g. East Legon, Spintex, Tema"
+            required
+          >
+        </label>
+
+        <fieldset class="field payment-field">
+          <legend class="field-label">How will you pay?</legend>
+
+          <div class="payment-options">
+
+            <label class="payment-option">
+              <input type="radio" name="payment" value="MoMo" checked>
+              <span>
+                <b>Mobile Money</b>
+                <em>Pay by MoMo before delivery</em>
+              </span>
+            </label>
+
+            <label class="payment-option">
+              <input type="radio" name="payment" value="Cash on Delivery">
+              <span>
+                <b>Cash on Delivery</b>
+                <em>Pay the rider when it arrives</em>
+              </span>
+            </label>
+
+            <label class="payment-option">
+              <input type="radio" name="payment" value="Bank Transfer">
+              <span>
+                <b>Bank Transfer</b>
+                <em>We send account details on WhatsApp</em>
+              </span>
+            </label>
+
+          </div>
+
+          <!--
+            MoMo details customers pay into.
+            >>> REPLACE the placeholder name below with the real account name. <<<
+          -->
+          <div class="momo-details" id="momoDetails">
+            <p class="momo-title">MoMo Payment Details</p>
+            <p><b>Number:</b> 020 672 4129</p>
+            <p><b>Name:</b> <span class="todo-placeholder">Jael's Empire</span></p>
+            <p class="momo-note">
+              Send the total, then share the screenshot on WhatsApp so we
+              confirm your order.
+            </p>
+          </div>
+
+        </fieldset>
+
+        <label class="field">
+          <span class="field-label">Note (optional)</span>
+          <textarea
+            name="note"
+            placeholder="Anything we should know — flavours, sizes, landmarks"
+          ></textarea>
+        </label>
+
+        <p class="form-error" id="checkoutError" role="alert" hidden></p>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="checkoutCancel">
+            Back
+          </button>
+          <button type="submit" class="btn" id="checkoutSubmit">
+            Send Order on WhatsApp
+          </button>
+        </div>
+
+        <p class="checkout-foot-note">
+          Your order opens in WhatsApp so we can confirm delivery and payment
+          with you directly.
+        </p>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       TOAST (add-to-basket feedback)
+  ========================== -->
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden>
+    <span id="toastText"></span>
+  </div>
+
+
   <!-- Back to top -->
   <button class="to-top" id="toTop" type="button" aria-label="Back to top">
     ↑
@@ -368,9 +757,34 @@
 
 
   <!-- =========================
-       JAVASCRIPT
+       CONFIG + JAVASCRIPT
+       This CONFIG block is the only place shop-wide settings live.
   ========================== -->
 
+  <script>
+    window.JAEL_CONFIG = {
+      /* WhatsApp number that receives orders. International format,
+         digits only — country code 233 for Ghana, no leading 0. */
+      whatsappNumber: "233206724129",
+
+      /* Number customers send MoMo payments to, as displayed. */
+      momoNumber: "020 672 4129",
+
+      /* >>> REPLACE with the real MoMo account name. <<< */
+      momoName: "Jael's Empire",
+
+      /* Currency label shown next to prices. */
+      currency: "GHS",
+
+      /* Free delivery over this amount, in GHS. Set to 0 to disable. */
+      freeDeliveryOver: 500,
+
+      /* Flat delivery fee in GHS, applied under the threshold. */
+      deliveryFee: 30
+    };
+  </script>
+
+  <script src="js/products.js"></script>
   <script src="js/script.js"></script>
 
 </body>
